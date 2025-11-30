@@ -17,7 +17,7 @@ authors:
   - name: Anonymous
 
 # must be the exact same name as your blogpost
-bibliography: 2026-04-27-tracing-prinicples-behind-modern-diffusion-models.bib
+bibliography: 2026-04-27-tracing-principles-behind-modern-diffusion-models.bib
 
 toc:
   - name: "I. A Systematic Tour of Diffusion Models"
@@ -101,7 +101,7 @@ On the simple side, we can easily generate randomness. For example, we can draw 
 
 At an abstract level, we can depict this as
 
-{% include figure.liquid path="assets/img/2026-04-27-tracing-prinicples-behind-modern-diffusion-models/dgm-learning.svg" class="img-fluid" %}
+{% include figure.liquid path="assets/img/2026-04-27-tracing-principles-behind-modern-diffusion-models/dgm-learning.svg" class="img-fluid" %}
 
 Classical models such as GANs and VAEs attempt to learn this arrow in one or a few large steps: a single neural network takes a noise vector and outputs an image.
 
@@ -109,13 +109,13 @@ Classical models such as GANs and VAEs attempt to learn this arrow in one or a f
 
 - In the **forward process**, we start from real data and gradually add small amounts of simple random noise at many tiny steps. As this corruption progresses, fine details disappear first, then larger structures become indistinct, and eventually every sample looks like featureless noise. By the end, all examples, regardless of which original image or sound they came from, are brought into a *common noisy space* that is very close to a standard Gaussian distribution and easy to sample from. Although we typically do not run this forward process at test time, it is essential during training because it provides a precise, controlled way to relate clean data to their noisy versions.
 
-{% include figure.liquid path="assets/img/2026-04-27-tracing-prinicples-behind-modern-diffusion-models/vdm-forward.svg" class="img-fluid" %}
+{% include figure.liquid path="assets/img/2026-04-27-tracing-principles-behind-modern-diffusion-models/vdm-forward.svg" class="img-fluid" %}
 
 
 - In the **reverse process**, the model learns to undo this artificial corruption step by step. Starting from pure noise, it applies a sequence of learned denoising updates that gradually reintroduce structure: coarse shapes first, then finer details. After enough steps, the final outputs resemble realistic data again. This reverse procedure is what we actually use at sampling time to turn noise into data.
 
 
-{% include figure.liquid path="assets/img/2026-04-27-tracing-prinicples-behind-modern-diffusion-models/vdm-backward.svg" class="img-fluid" %}
+{% include figure.liquid path="assets/img/2026-04-27-tracing-principles-behind-modern-diffusion-models/vdm-backward.svg" class="img-fluid" %}
 
 
 In both directions, there is a common underlying object: a *probability denity* that evolves over time. At time $$t = 0$$, we may have a density that is shaped like the data distribution. As $$t$$ increases, the forward process transports and blurs this density until it approaches a simple reference distribution, often called the *prior*. In practice, this prior is typically chosen to be a standard Gaussian, because we know how to sample from it efficiently and its properties admit closed-form expressions.
@@ -360,7 +360,7 @@ The key point is that the PF-ODE is constructed so that, for every time $$t$$, t
 Starting from a seed drawn from the prior, $$\mathbf{x}_T\sim p_{\text{prior}}$$, we numerically integrate the PF-ODE backward from $$t=T$$ to $$t=0$$. The endpoint $$\mathbf{x}_0$$ is then a data-like sample. 
 
 
-{% include figure.liquid path="assets/img/2026-04-27-tracing-prinicples-behind-modern-diffusion-models/continuous_ode.svg" class="img-fluid" %}
+{% include figure.liquid path="assets/img/2026-04-27-tracing-principles-behind-modern-diffusion-models/continuous_ode.svg" class="img-fluid" %}
 
 The score SDE framework can be viewed as a *continuous-time* extension of DDPM. It reframes diffusion generation as solving a time-dependent differential equation, which connects generative modeling to classical tools from differential equations. We will illustrate this with concrete examples when we introduce the Flow Matching framework below, which keeps the notation simple.
 
@@ -593,7 +593,7 @@ The takeaway we will keep using is:
 
 > If we move points by an invertible map, density changes according to how much the map locally stretches or compresses space.
 
-{% include figure.liquid path="assets/img/2026-04-27-tracing-prinicples-behind-modern-diffusion-models/change-of-variable.png" class="img-fluid" %}
+{% include figure.liquid path="assets/img/2026-04-27-tracing-principles-behind-modern-diffusion-models/change-of-variable.png" class="img-fluid" %}
 
 
 ## From One Big Map to a Time-Evolution
@@ -722,7 +722,7 @@ That "more in than out" statement is exactly what the $$-\nabla\!\cdot \mathbf{J
 
 The time evolution of the density $$p_t$$, governed by the Fokker–Planck equation, can be visualized in the GIF below:
 
-{% include figure.liquid path="assets/img/2026-04-27-tracing-prinicples-behind-modern-diffusion-models/fokker_planck_gmm_to_equilibrium.gif" class="img-fluid" %}
+{% include figure.liquid path="assets/img/2026-04-27-tracing-principles-behind-modern-diffusion-models/fokker_planck_gmm_to_equilibrium.gif" class="img-fluid" %}
 
 
 
@@ -809,7 +809,7 @@ $$
 $$
 
 
-{% include figure.liquid path="assets/img/2026-04-27-tracing-prinicples-behind-modern-diffusion-models/flow-map.svg" class="img-fluid" %}
+{% include figure.liquid path="assets/img/2026-04-27-tracing-principles-behind-modern-diffusion-models/flow-map.svg" class="img-fluid" %}
 
 
 
@@ -966,7 +966,7 @@ $$
 $$
 
 
-{% include figure.liquid path="assets/img/2026-04-27-tracing-prinicples-behind-modern-diffusion-models/semigroup.svg" class="img-fluid" %}
+{% include figure.liquid path="assets/img/2026-04-27-tracing-principles-behind-modern-diffusion-models/semigroup.svg" class="img-fluid" %}
 
 So CTM enforces the same idea with its learned map: a *big jump* should agree with *two smaller jumps* stitched at $$u$$. Since the oracle maps are unavailable, CTM uses a stop-gradient self-target:
 
@@ -988,7 +988,7 @@ $$
 \Psi_{s\to u}(\mathbf{x}_s) \approx \text{few solver steps using } \mathbf{g}_\theta(\cdot,s,s) \text{ from } s \text{ to } u.
 $$
 
-{% include figure.liquid path="assets/img/2026-04-27-tracing-prinicples-behind-modern-diffusion-models/ctm-target.svg" class="img-fluid" %}
+{% include figure.liquid path="assets/img/2026-04-27-tracing-principles-behind-modern-diffusion-models/ctm-target.svg" class="img-fluid" %}
 
 
 
